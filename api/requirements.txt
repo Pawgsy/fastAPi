@@ -1,0 +1,10 @@
+fastapi==0.103.1
+uvicorn==0.23.2
+httptools==0.6.0
+mysqlclient==2.2.0
+sqlmodel==0.0.27
+pydantic==2.3.0
+python-dotenv==1.0.0
+SQLAlchemy==2.0.21
+starlette==0.27.0
+typing==3.10.0.0

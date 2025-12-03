@@ -1,0 +1,15 @@
+FROM python:3.11.14
+
+WORKDIR /app
+
+# Vermeidet das Schreiben von .pyc-Dateien und puffert die Ausgabe nicht
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+COPY ./app .
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["uvicorn", "main:app", "--host","0.0.0.0"]

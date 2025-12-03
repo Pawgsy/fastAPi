@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linksammlung</title>
+    <script src="https://cdn.jsdelivr.net/npm/react@19.2.0/jsx-runtime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tailwindcss@4.1.17/dist/lib.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@4.1.17/dist/lib.min.js"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <form>
+        <fieldset>
+          <button type="button" onclick="links()"><</button>
+          <button type="button" onclick="neuladen()">Neuladung</button>
+          <button type="button" onclick="rechts()">></button>
+        </fieldset>
+      </form>
+    </header>
+    <main>
+      <article id="linkanzeige" class="datensatz">
+        <form method="get" action="http://127.0.0.1:8443/links" onload="">
+          <fieldset name="asdasddsa">
+            <legend id="lblNummer">99999999999</legend>
+            <input id="txtNutzer" type="text" /><br />
+            <input id="txtLink" type="text" /><br />
+            <button type="submit">Ändern</button>
+          </fieldset>
+        </form>
+      </article>
+    </main>
+    <footer></footer>
+    <script>
+      let state_current_position = 0;
+
+      let dieDatengesetzen = {
+        links: [
+          { id: "0", hyperlink: "https://google.com", author: "Florian" },
+          { id: "1", hyperlink: "https://google.com", author: "Florian" },
+          { id: "2", hyperlink: "https://google.com", author: "Florian" },
+        ],
+      };
+
+      function toLeft() {
+        //invoked via onClick
+        left(state_current_position);
+      }
+      function toRight() {
+        //invoked via onClick
+        right(state_current_position);
+      }
+      function toReload() {
+        //invoked via onClick
+        reload(state_current_position);
+      }
+
+      function left(current_id) {
+        state_current_position--;
+        current_id--;
+        update_view(dieDatengesetzen[current_id]);
+      }
+      function right(current_id) {
+        state_current_position++;
+        current_id++;
+        update_view(dieDatengesetzen[current_id]);
+      }
+      function reload(current_id) {
+        dieDatengesetzen = getLinks();
+
+        update_view(dieDatengesetzen[current_id]);
+      }
+      //READ
+      async function getLinks() {
+        const url = "http://localhost:8443/links";
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            headers: {},
+          });
+          if (!response.ok) {
+            //das kopiert
+            throw new Error(`Response status: ${response.status}`);
+          }
+          const result = await response.json();
+          return result;
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+      // DELETE
+      async function deleteLink(dasObjekt) {
+        const response = await fetch(
+          `http://localhost:8443/links/${dasObjekt.id}`,
+          {
+            method: "DELETE",
+            headers: {},
+            body: JSON.stringify(dasObjekt),
+          }
+        );
+        console.log(response.status);
+      }
+      // UPDATE
+      async function updateLink(dasObjekt) {
+        const response = await fetch(
+          `http://localhost:8443/links/${dasObjekt.id}`,
+          {
+            method: "PUT",
+            headers: {},
+            body: JSON.stringify(dasObjekt),
+          }
+        );
+        console.log(response.status);
+      }
+      // CREATE
+      async function pushLink(dasObjekt) {
+        const response = await fetch(`http://localhost:8443/links`, {
+          method: "POST",
+          headers: {},
+          body: JSON.stringify(dasObjekt),
+        });
+        console.log(response.status);
+      }
+
+      function update_view(derDatensatz) {
+        label_iD = document.getElementById("lblNummer");
+        textfeld_Nutzer = document.getElementById("txtNutzer");
+        textfeld_Link = document.getElementById("txtLink");
+
+        label_iD.innerHTML = derDatensatz.id;
+        textfeld_Nutzer.value = derDatensatz.author;
+        textfeld_Link.value = derDatensatz.hyperlink;
+      }
+    </script>
+    <script src="main.js"></script>
+  </body>
+</html>
