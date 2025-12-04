@@ -2,6 +2,7 @@
 
 ## Structure
 
+```text
 fastapi
 ├── docker-compose.yaml
 ├── web
@@ -27,5 +28,5 @@ fastapi
 │ └── robots.txt
 ├── README.md
 ├── .gitignore
-├── .gitignore
 └──
+```
